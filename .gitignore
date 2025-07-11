@@ -1,0 +1,20 @@
+# Generated .gitignore file
+# Created with Gitie
+
+# Go
+# Binaries for programs and plugins
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Go workspace file
+go.work
