@@ -1,12 +1,8 @@
 "use client";
 
 import { Site } from "@/lib/constant";
-import { IconPackageFill } from "@intentui/icons";
 import {
   LetterText,
-  Github,
-  Twitter,
-  Instagram,
   ArrowUpRight,
 } from "lucide-react";
 import Link from "next/link";
