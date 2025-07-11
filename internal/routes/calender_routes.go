@@ -13,7 +13,7 @@ func SetupJavaneseCalendarRoutes(router *mux.Router) {
 	javaneseService := service.NewJavaneseCalendarService()
 	javaneseHandler := handler.NewJavaneseCalendarHandler(javaneseService)
 
-	api := router.PathPrefix("/api/javanese").Subrouter()
+	api := router.PathPrefix("/api/v1").Subrouter()
 
 	api.HandleFunc("/today", javaneseHandler.GetToday).Methods("GET")
 	api.HandleFunc("/date/{date}", javaneseHandler.GetByDate).Methods("GET")

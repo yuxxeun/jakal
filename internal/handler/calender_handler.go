@@ -19,7 +19,6 @@ func NewJavaneseCalendarHandler(service *service.JavaneseCalendarService) *Javan
 	return &JavaneseCalendarHandler{service: service}
 }
 
-// GetToday mengembalikan tanggal Jawa hari ini
 func (h *JavaneseCalendarHandler) GetToday(w http.ResponseWriter, r *http.Request) {
 	today := time.Now()
 	javaneseDate := h.service.ConvertToJavaneseDate(today)
@@ -33,7 +32,6 @@ func (h *JavaneseCalendarHandler) GetToday(w http.ResponseWriter, r *http.Reques
 	h.sendJSONResponse(w, http.StatusOK, response)
 }
 
-// GetByDate mengembalikan tanggal Jawa berdasarkan tanggal tertentu
 func (h *JavaneseCalendarHandler) GetByDate(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	dateStr := vars["date"]
@@ -55,7 +53,6 @@ func (h *JavaneseCalendarHandler) GetByDate(w http.ResponseWriter, r *http.Reque
 	h.sendJSONResponse(w, http.StatusOK, response)
 }
 
-// GetDateRange mengembalikan range tanggal Jawa
 func (h *JavaneseCalendarHandler) GetDateRange(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	startStr := vars["start"]
@@ -78,7 +75,6 @@ func (h *JavaneseCalendarHandler) GetDateRange(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	// Batasi range maksimal 1 tahun untuk performa
 	maxDays := 365
 	if int(end.Sub(start).Hours()/24) > maxDays {
 		h.sendErrorResponse(w, http.StatusBadRequest, "Range tanggal maksimal 1 tahun")
@@ -96,7 +92,6 @@ func (h *JavaneseCalendarHandler) GetDateRange(w http.ResponseWriter, r *http.Re
 	h.sendJSONResponse(w, http.StatusOK, response)
 }
 
-// GetByYear mengembalikan semua tanggal Jawa dalam tahun tertentu
 func (h *JavaneseCalendarHandler) GetByYear(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	yearStr := vars["year"]
@@ -107,7 +102,6 @@ func (h *JavaneseCalendarHandler) GetByYear(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	// Batasi tahun untuk performa
 	currentYear := time.Now().Year()
 	if year < 1900 || year > currentYear+50 {
 		h.sendErrorResponse(w, http.StatusBadRequest, "Tahun harus antara 1900 - "+strconv.Itoa(currentYear+50))
@@ -125,7 +119,6 @@ func (h *JavaneseCalendarHandler) GetByYear(w http.ResponseWriter, r *http.Reque
 	h.sendJSONResponse(w, http.StatusOK, response)
 }
 
-// GetByMonth mengembalikan semua tanggal Jawa dalam bulan tertentu
 func (h *JavaneseCalendarHandler) GetByMonth(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	yearStr := vars["year"]
@@ -154,7 +147,6 @@ func (h *JavaneseCalendarHandler) GetByMonth(w http.ResponseWriter, r *http.Requ
 	h.sendJSONResponse(w, http.StatusOK, response)
 }
 
-// GetWeton mengembalikan weton untuk tanggal tertentu
 func (h *JavaneseCalendarHandler) GetWeton(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	dateStr := vars["date"]
@@ -179,7 +171,6 @@ func (h *JavaneseCalendarHandler) GetWeton(w http.ResponseWriter, r *http.Reques
 	h.sendJSONResponse(w, http.StatusOK, response)
 }
 
-// GetNeptu mengembalikan neptu untuk tanggal tertentu
 func (h *JavaneseCalendarHandler) GetNeptu(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	dateStr := vars["date"]
@@ -210,7 +201,6 @@ func (h *JavaneseCalendarHandler) GetNeptu(w http.ResponseWriter, r *http.Reques
 	h.sendJSONResponse(w, http.StatusOK, response)
 }
 
-// GetWetonCompatibility menghitung kecocokan weton
 func (h *JavaneseCalendarHandler) GetWetonCompatibility(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	date1Str := vars["date1"]
@@ -250,7 +240,6 @@ func (h *JavaneseCalendarHandler) GetWetonCompatibility(w http.ResponseWriter, r
 	h.sendJSONResponse(w, http.StatusOK, response)
 }
 
-// GetGoodDays mengembalikan hari baik berdasarkan weton lahir
 func (h *JavaneseCalendarHandler) GetGoodDays(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	birthDateStr := vars["birth_date"]

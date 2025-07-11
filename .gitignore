@@ -2,8 +2,9 @@
 # Created with Gitie
 
 # Go
-# Binaries for programs and plugins
+# Binaries for programs, plugins & temp 
 bin/
+tmp
 *.exe
 *.exe~
 *.dll

@@ -36,34 +36,24 @@ func NewJavaneseCalendarService() *JavaneseCalendarService {
 	}
 }
 
-// ConvertToJavaneseDate mengkonversi tanggal Masehi ke tanggal Jawa
 func (s *JavaneseCalendarService) ConvertToJavaneseDate(date time.Time) *model.JavaneseDate {
-	// Hitung hari dalam seminggu
+
 	dayIndex := int(date.Weekday())
 	dayName := s.dayNames[dayIndex]
 
-	// Hitung pasaran (siklus 5 hari)
-	// Referensi: 1 Januari 1970 adalah Kamis Wage
-	// Berdasarkan referensi kalenderjawa.id dan ki-demang.com
 	epoch := time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC)
 	daysSinceEpoch := int(date.Sub(epoch).Hours() / 24)
 
-	// 1 Januari 1970 adalah Kamis Wage
-	// Kamis = index 4, Wage = index 3 (dalam array pasaranNames)
-	// Sehingga untuk menghitung pasaran: (daysSinceEpoch + 3) % 5
 	pasaranIndex := (daysSinceEpoch + 3) % 5
 	if pasaranIndex < 0 {
 		pasaranIndex += 5
 	}
 	pasaranName := s.pasaranNames[pasaranIndex]
 
-	// Hitung weton (kombinasi hari dan pasaran)
 	weton := dayName + " " + pasaranName
 
-	// Hitung tahun Jawa (sistem tahun Jawa dimulai dari 1633 Masehi = 1 Jawa)
 	javaneseYear := date.Year() - 1632
 
-	// Hitung neptu (nilai weton)
 	neptu := s.dayNeptu[dayName] + s.pasaranNeptu[pasaranName]
 
 	return &model.JavaneseDate{
@@ -78,7 +68,6 @@ func (s *JavaneseCalendarService) ConvertToJavaneseDate(date time.Time) *model.J
 	}
 }
 
-// GetDateRange mengembalikan range tanggal Jawa
 func (s *JavaneseCalendarService) GetDateRange(start, end time.Time) []*model.JavaneseDate {
 	var dates []*model.JavaneseDate
 
@@ -90,14 +79,12 @@ func (s *JavaneseCalendarService) GetDateRange(start, end time.Time) []*model.Ja
 	return dates
 }
 
-// GetYearData mengembalikan data tahun lengkap
 func (s *JavaneseCalendarService) GetYearData(year int) *model.YearData {
 	start := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
 	end := time.Date(year, 12, 31, 0, 0, 0, 0, time.UTC)
 
 	dates := s.GetDateRange(start, end)
 
-	// Hitung statistik
 	stats := s.calculateYearStats(dates)
 
 	return &model.YearData{
@@ -108,7 +95,6 @@ func (s *JavaneseCalendarService) GetYearData(year int) *model.YearData {
 	}
 }
 
-// GetMonthData mengembalikan data bulan lengkap
 func (s *JavaneseCalendarService) GetMonthData(year, month int) *model.MonthData {
 	start := time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.UTC)
 	end := start.AddDate(0, 1, -1)
@@ -123,22 +109,18 @@ func (s *JavaneseCalendarService) GetMonthData(year, month int) *model.MonthData
 	}
 }
 
-// GetWetonByDate mengembalikan weton untuk tanggal tertentu
 func (s *JavaneseCalendarService) GetWetonByDate(date time.Time) string {
 	javaneseDate := s.ConvertToJavaneseDate(date)
 	return javaneseDate.Weton
 }
 
-// GetNeptuByDate mengembalikan neptu untuk tanggal tertentu
 func (s *JavaneseCalendarService) GetNeptuByDate(date time.Time) int {
 	javaneseDate := s.ConvertToJavaneseDate(date)
 	return javaneseDate.Neptu
 }
 
-// CalculateWetonCompatibility menghitung kecocokan weton berdasarkan primbon Jawa
 func (s *JavaneseCalendarService) CalculateWetonCompatibility(weton1, weton2 string) string {
-	// Implementasi sederhana kecocokan weton
-	// Bisa diperluas dengan logika primbon yang lebih kompleks
+
 	return "Implementasi kecocokan weton belum lengkap"
 }
 
@@ -160,20 +142,16 @@ func (s *JavaneseCalendarService) calculateYearStats(dates []*model.JavaneseDate
 	}
 }
 
-// GetGoodDays mengembalikan hari baik berdasarkan weton
 func (s *JavaneseCalendarService) GetGoodDays(birthDate time.Time, targetYear int) []time.Time {
 	var goodDays []time.Time
 	birthWeton := s.ConvertToJavaneseDate(birthDate)
 
-	// Implementasi sederhana untuk mencari hari baik
-	// Berdasarkan siklus 35 hari (7 hari x 5 pasaran)
 	start := time.Date(targetYear, 1, 1, 0, 0, 0, 0, time.UTC)
 	end := time.Date(targetYear, 12, 31, 0, 0, 0, 0, time.UTC)
 
 	for d := start; !d.After(end); d = d.AddDate(0, 0, 1) {
 		currentWeton := s.ConvertToJavaneseDate(d)
 
-		// Contoh: hari baik jika neptu sama atau kelipatan tertentu
 		if currentWeton.Neptu == birthWeton.Neptu ||
 			(currentWeton.Neptu+birthWeton.Neptu)%5 == 0 {
 			goodDays = append(goodDays, d)
@@ -183,12 +161,10 @@ func (s *JavaneseCalendarService) GetGoodDays(birthDate time.Time, targetYear in
 	return goodDays
 }
 
-// GetDayNeptu mengembalikan nilai neptu untuk hari tertentu
 func (s *JavaneseCalendarService) GetDayNeptu(day string) int {
 	return s.dayNeptu[day]
 }
 
-// GetPasaranNeptu mengembalikan nilai neptu untuk pasaran tertentu
 func (s *JavaneseCalendarService) GetPasaranNeptu(pasaran string) int {
 	return s.pasaranNeptu[pasaran]
 }
