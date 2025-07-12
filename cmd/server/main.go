@@ -23,7 +23,7 @@ func main() {
 	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"status": "ok", "service": "Jakal —  Javanese Calendar API"}`))
+		w.Write([]byte(`{"status": "ok", "service": "Jakal — Javanese Calendar API build with gorilla/mux 🦍 "}`))
 	}).Methods("GET")
 
 	// API documentation endpoint
@@ -31,7 +31,7 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{
-			"service": "Javanese Calendar API",
+			"service": "Jakal — Javanese Calendar API build with gorilla/mux 🦍 ",
 			"version": "1.0.0",
 			"description": "API untuk konversi tanggal Jawa dengan perhitungan weton dan neptu yang akurat",
 			"endpoints": {
