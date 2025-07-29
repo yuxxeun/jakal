@@ -1,6 +1,7 @@
 package service
 
 import (
+	"strings"
 	"time"
 
 	"github.com/yuxxeun/jakal/internal/model"
@@ -34,6 +35,30 @@ func NewJavaneseCalendarService() *JavaneseCalendarService {
 			"Kliwon": 8,
 		},
 	}
+}
+
+func (s *JavaneseCalendarService) FilterByWeton(year int, month int, weton string) []model.JavaneseDate {
+	var results []model.JavaneseDate
+
+	var start, end time.Time
+	if month == 0 {
+		// Untuk satu tahun penuh
+		start = time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+		end = time.Date(year, 12, 31, 0, 0, 0, 0, time.UTC)
+	} else {
+		// Untuk bulan tertentu
+		start = time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.UTC)
+		end = start.AddDate(0, 1, -1) // Hari terakhir bulan tersebut
+	}
+
+	for d := start; !d.After(end); d = d.AddDate(0, 0, 1) {
+		jd := s.ConvertToJavaneseDate(d)
+		if jd.Weton == weton {
+			results = append(results, *jd)
+		}
+	}
+
+	return results
 }
 
 func (s *JavaneseCalendarService) ConvertToJavaneseDate(date time.Time) *model.JavaneseDate {
@@ -167,4 +192,68 @@ func (s *JavaneseCalendarService) GetDayNeptu(day string) int {
 
 func (s *JavaneseCalendarService) GetPasaranNeptu(pasaran string) int {
 	return s.pasaranNeptu[pasaran]
+}
+
+// Method baru untuk mendapatkan semua kemungkinan weton
+func (s *JavaneseCalendarService) GetAllPossibleWeton() []string {
+	var wetons []string
+	for _, day := range s.dayNames {
+		for _, pasaran := range s.pasaranNames {
+			wetons = append(wetons, day+" "+pasaran)
+		}
+	}
+	return wetons
+}
+
+// Method baru untuk validasi weton
+func (s *JavaneseCalendarService) IsValidWeton(weton string) bool {
+	parts := strings.Split(weton, " ")
+	if len(parts) != 2 {
+		return false
+	}
+
+	day := parts[0]
+	pasaran := parts[1]
+
+	// Validasi hari
+	validDay := false
+	for _, d := range s.dayNames {
+		if strings.EqualFold(d, day) {
+			validDay = true
+			break
+		}
+	}
+
+	// Validasi pasaran
+	validPasaran := false
+	for _, p := range s.pasaranNames {
+		if strings.EqualFold(p, pasaran) {
+			validPasaran = true
+			break
+		}
+	}
+
+	return validDay && validPasaran
+}
+
+// Method untuk mencari weton berikutnya dari tanggal tertentu
+func (s *JavaneseCalendarService) FindNextWetonOccurrence(startDate time.Time, targetWeton string) *time.Time {
+	// Maksimal cari 35 hari ke depan (1 siklus lengkap weton)
+	for i := 0; i < 35; i++ {
+		checkDate := startDate.AddDate(0, 0, i)
+		jd := s.ConvertToJavaneseDate(checkDate)
+		if strings.EqualFold(jd.Weton, targetWeton) {
+			return &checkDate
+		}
+	}
+	return nil
+}
+
+// Method untuk menghitung berapa hari lagi sampai weton tertentu
+func (s *JavaneseCalendarService) DaysUntilWeton(fromDate time.Time, targetWeton string) int {
+	nextOccurrence := s.FindNextWetonOccurrence(fromDate, targetWeton)
+	if nextOccurrence == nil {
+		return -1
+	}
+	return int(nextOccurrence.Sub(fromDate).Hours() / 24)
 }

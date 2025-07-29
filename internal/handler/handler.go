@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -48,6 +49,71 @@ func (h *JavaneseCalendarHandler) GetByDate(w http.ResponseWriter, r *http.Reque
 		Status:  "success",
 		Message: "Tanggal Jawa untuk " + dateStr,
 		Data:    javaneseDate,
+	}
+
+	h.sendJSONResponse(w, http.StatusOK, response)
+}
+
+func (h *JavaneseCalendarHandler) FilterByWeton(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	weton := vars["weton"]
+	yearStr := vars["year"]
+	monthStr := vars["month"]
+
+	// Support strip dan %20 - normalize weton
+	weton = strings.ReplaceAll(weton, "-", " ")   // Convert strip to space
+	weton = strings.ReplaceAll(weton, "%20", " ") // Support legacy URL encoding
+
+	// Normalize case - capitalize each word
+	parts := strings.Fields(weton)
+	for i, part := range parts {
+		parts[i] = strings.Title(strings.ToLower(part))
+	}
+	weton = strings.Join(parts, " ")
+
+	year, err := strconv.Atoi(yearStr)
+	if err != nil {
+		h.sendErrorResponse(w, http.StatusBadRequest, "Format tahun tidak valid")
+		return
+	}
+
+	// Validasi tahun
+	currentYear := time.Now().Year()
+	if year < 1900 || year > currentYear+50 {
+		h.sendErrorResponse(w, http.StatusBadRequest, "Tahun harus antara 1900 - "+strconv.Itoa(currentYear+50))
+		return
+	}
+
+	month := 0
+	if monthStr != "" {
+		month, err = strconv.Atoi(monthStr)
+		if err != nil || month < 1 || month > 12 {
+			h.sendErrorResponse(w, http.StatusBadRequest, "Format bulan tidak valid (1-12)")
+			return
+		}
+	}
+
+	dates := h.service.FilterByWeton(year, month, weton)
+
+	var message string
+	if month == 0 {
+		message = "Daftar tanggal untuk weton " + weton + " di tahun " + yearStr
+	} else {
+		monthNames := []string{"", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+			"Juli", "Agustus", "September", "Oktober", "November", "Desember"}
+		message = "Daftar tanggal untuk weton " + weton + " di bulan " + monthNames[month] + " " + yearStr
+	}
+
+	response := model.APIResponse{
+		Status:  "success",
+		Message: message,
+		Data: map[string]interface{}{
+			"weton":       weton,
+			"year":        year,
+			"month":       month,
+			"total_dates": len(dates),
+			"dates":       dates,
+		},
 	}
 
 	h.sendJSONResponse(w, http.StatusOK, response)
@@ -268,6 +334,83 @@ func (h *JavaneseCalendarHandler) GetGoodDays(w http.ResponseWriter, r *http.Req
 			Year:       targetYear,
 			GoodDays:   goodDays,
 			TotalDays:  len(goodDays),
+		},
+	}
+
+	h.sendJSONResponse(w, http.StatusOK, response)
+}
+
+// GetAllWeton - menampilkan semua kemungkinan weton
+func (h *JavaneseCalendarHandler) GetAllWeton(w http.ResponseWriter, r *http.Request) {
+	wetons := h.service.GetAllPossibleWeton()
+
+	response := model.APIResponse{
+		Status:  "success",
+		Message: "Daftar semua kemungkinan weton dalam kalender Jawa",
+		Data: map[string]interface{}{
+			"total_weton": len(wetons),
+			"wetons":      wetons,
+		},
+	}
+
+	h.sendJSONResponse(w, http.StatusOK, response)
+}
+
+// GetWetonStatistics - statistik weton dalam periode tertentu
+func (h *JavaneseCalendarHandler) GetWetonStatistics(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	startStr := vars["start"]
+	endStr := vars["end"]
+
+	start, err := time.Parse("2006-01-02", startStr)
+	if err != nil {
+		h.sendErrorResponse(w, http.StatusBadRequest, "Format tanggal start tidak valid")
+		return
+	}
+
+	end, err := time.Parse("2006-01-02", endStr)
+	if err != nil {
+		h.sendErrorResponse(w, http.StatusBadRequest, "Format tanggal end tidak valid")
+		return
+	}
+
+	if start.After(end) {
+		h.sendErrorResponse(w, http.StatusBadRequest, "Tanggal start tidak boleh lebih besar dari end")
+		return
+	}
+
+	// Maksimal 2 tahun untuk menghindari overload
+	maxDays := 730
+	if int(end.Sub(start).Hours()/24) > maxDays {
+		h.sendErrorResponse(w, http.StatusBadRequest, "Range tanggal maksimal 2 tahun")
+		return
+	}
+
+	dateRange := h.service.GetDateRange(start, end)
+
+	// Hitung statistik
+	wetonCount := make(map[string]int)
+	dayCount := make(map[string]int)
+	pasaranCount := make(map[string]int)
+
+	for _, date := range dateRange {
+		wetonCount[date.Weton]++
+		dayCount[date.Day]++
+		pasaranCount[date.Pasaran]++
+	}
+
+	response := model.APIResponse{
+		Status:  "success",
+		Message: "Statistik weton dari " + startStr + " hingga " + endStr,
+		Data: map[string]interface{}{
+			"period": map[string]string{
+				"start": startStr,
+				"end":   endStr,
+			},
+			"total_days":    len(dateRange),
+			"weton_count":   wetonCount,
+			"day_count":     dayCount,
+			"pasaran_count": pasaranCount,
 		},
 	}
 

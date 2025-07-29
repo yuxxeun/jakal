@@ -26,6 +26,9 @@ func SetupJavaneseCalendarRoutes(router *mux.Router) {
 	api.HandleFunc("/compatibility/{date1}/{date2}", javaneseHandler.GetWetonCompatibility).Methods("GET")
 	api.HandleFunc("/good-days/{birth_date}/{target_year}", javaneseHandler.GetGoodDays).Methods("GET")
 
+	api.HandleFunc("/weton/{weton}/{year}", javaneseHandler.FilterByWeton).Methods("GET")
+	api.HandleFunc("/weton/{weton}/{year}/{month}", javaneseHandler.FilterByWeton).Methods("GET")
+
 	api.HandleFunc("/{path:.*}", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")

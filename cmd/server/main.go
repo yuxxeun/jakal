@@ -23,7 +23,7 @@ func main() {
 	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"status": "ok", "service": "Jakal — Javanese Calendar API build with gorilla/mux 🦍 "}`))
+		w.Write([]byte(`{"status": "ok", "service": "Jakal — Javanese Calendar API build with gorilla/mux 🦍"}`))
 	}).Methods("GET")
 
 	// API documentation endpoint
@@ -31,7 +31,7 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{
-			"service": "Jakal — Javanese Calendar API build with gorilla/mux 🦍 ",
+			"service": "Jakal — Javanese Calendar API build with gorilla/mux 🦍",
 			"version": "1.0.0",
 			"description": "API untuk konversi tanggal Jawa dengan perhitungan weton dan neptu yang akurat",
 			"endpoints": {
@@ -46,7 +46,15 @@ func main() {
 					"GET /api/v1/weton/{date}": "Weton untuk tanggal tertentu",
 					"GET /api/v1/neptu/{date}": "Neptu untuk tanggal tertentu",
 					"GET /api/v1/compatibility/{date1}/{date2}": "Kecocokan weton dua tanggal",
-					"GET /api/v1/good-days/{birth_date}/{target_year}": "Hari baik berdasarkan weton lahir"
+					"GET /api/v1/good-days/{birth_date}/{target_year}": "Hari baik berdasarkan weton lahir",
+					"GET /api/v1/wetons": "Daftar semua kemungkinan weton (35 kombinasi)"
+				},
+				"filter": {
+					"GET /api/v1/weton/{weton}/{year}": "Filter weton dalam tahun (support strip: selasa-legi)",
+					"GET /api/v1/weton/{weton}/{year}/{month}": "Filter weton dalam bulan tertentu"
+				},
+				"statistics": {
+					"GET /api/v1/statistics/{start}/{end}": "Statistik weton dalam periode tertentu"
 				},
 				"utility": {
 					"GET /health": "Status kesehatan API",
@@ -55,11 +63,19 @@ func main() {
 			},
 			"examples": {
 				"today": "/api/v1/today",
-				"specific_date": "/api/v1/date/2025-07-11",
+				"specific_date": "/api/v1/date/2025-07-29",
 				"weton": "/api/v1/weton/1990-05-15",
 				"neptu": "/api/v1/neptu/1990-05-15",
 				"compatibility": "/api/v1/compatibility/1990-05-15/1992-08-20",
-				"good_days": "/api/v1/good-days/1990-05-15/2025"
+				"good_days": "/api/v1/good-days/1990-05-15/2025",
+				"all_wetons": "/api/v1/wetons",
+				"filter_weton_year": "/api/v1/weton/selasa-legi/2025",
+				"filter_weton_month": "/api/v1/weton/jumat-kliwon/2025/7",
+				"statistics": "/api/v1/statistics/2025-01-01/2025-12-31"
+			},
+			"notes": {
+				"weton_format": "Sekarang mendukung strip (-) sebagai pengganti spasi. Contoh: 'selasa-legi' atau 'Selasa%20Legi'",
+				"case_insensitive": "Format weton tidak case sensitive: 'selasa-legi' = 'Selasa-Legi' = 'SELASA-LEGI'"
 			}
 		}`))
 	}).Methods("GET")
@@ -74,6 +90,7 @@ func main() {
 	log.Printf("📖 API Documentation: http://localhost:%s/", port)
 	log.Printf("💚 Health Check: http://localhost:%s/health", port)
 	log.Printf("📅 Example: http://localhost:%s/api/v1/today", port)
+	log.Printf("🔍 Filter Weton: http://localhost:%s/api/v1/weton/selasa-legi/2025", port)
 
 	// Start server
 	log.Fatal(http.ListenAndServe(":"+port, router))
