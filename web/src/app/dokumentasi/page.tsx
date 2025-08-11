@@ -9,38 +9,38 @@ import { Site } from "@/lib/site"
 export default function DocsPage() {
   const endpoints = [
     {
-      category: "Basic Operations",
+      category: "Operasi Dasar",
       endpoints: [
-        { method: "GET", path: "/api/v1/today", description: "Get today's Javanese date" },
-        { method: "GET", path: "/api/v1/date/{date}", description: "Convert specific date" },
-        { method: "GET", path: "/api/v1/range/{start}/{end}", description: "Get date range data" },
-        { method: "GET", path: "/api/v1/year/{year}", description: "Get year data" },
-        { method: "GET", path: "/api/v1/month/{year}/{month}", description: "Get month data" },
+        { method: "GET", path: "/api/v1/today", description: "Mendapatkan tanggal Jawa hari ini" },
+        { method: "GET", path: "/api/v1/date/{date}", description: "Mengonversi tanggal tertentu" },
+        { method: "GET", path: "/api/v1/range/{start}/{end}", description: "Mendapatkan data dalam rentang tanggal" },
+        { method: "GET", path: "/api/v1/year/{year}", description: "Mendapatkan data setahun penuh" },
+        { method: "GET", path: "/api/v1/month/{year}/{month}", description: "Mendapatkan data sebulan penuh" },
       ],
     },
     {
       category: "Weton & Neptu",
       endpoints: [
-        { method: "GET", path: "/api/v1/weton/{date}", description: "Get weton for date" },
-        { method: "GET", path: "/api/v1/neptu/{date}", description: "Calculate neptu" },
-        { method: "GET", path: "/api/v1/compatibility/{date1}/{date2}", description: "Check compatibility" },
-        { method: "GET", path: "/api/v1/good-days/{birth_date}/{target_year}", description: "Find good days" },
-        { method: "GET", path: "/api/v1/wetons", description: "List all wetons" },
+        { method: "GET", path: "/api/v1/weton/{date}", description: "Menampilkan weton pada tanggal tertentu" },
+        { method: "GET", path: "/api/v1/neptu/{date}", description: "Menghitung nilai neptu" },
+        { method: "GET", path: "/api/v1/compatibility/{date1}/{date2}", description: "Cek kecocokan berdasarkan weton" },
+        { method: "GET", path: "/api/v1/good-days/{birth_date}/{target_year}", description: "Mencari hari baik" },
+        { method: "GET", path: "/api/v1/wetons", description: "Menampilkan daftar semua weton" },
       ],
     },
     {
-      category: "Filtering",
+      category: "Penyaringan",
       endpoints: [
-        { method: "GET", path: "/api/v1/weton/{weton}/{year}", description: "Filter by weton and year" },
-        { method: "GET", path: "/api/v1/weton/{weton}/{year}/{month}", description: "Filter by weton and month" },
+        { method: "GET", path: "/api/v1/weton/{weton}/{year}", description: "Filter berdasarkan weton dan tahun" },
+        { method: "GET", path: "/api/v1/weton/{weton}/{year}/{month}", description: "Filter berdasarkan weton dan bulan" },
       ],
     },
     {
-      category: "Statistics & Utility",
+      category: "Statistik & Utilitas",
       endpoints: [
-        { method: "GET", path: "/api/v1/statistics/{start}/{end}", description: "Get statistics" },
-        { method: "GET", path: "/health", description: "API health status" },
-        { method: "GET", path: "/", description: "API documentation" },
+        { method: "GET", path: "/api/v1/statistics/{start}/{end}", description: "Mendapatkan statistik" },
+        { method: "GET", path: "/health", description: "Status kesehatan API" },
+        { method: "GET", path: "/", description: "Dokumentasi API" },
       ],
     },
   ]
@@ -51,13 +51,15 @@ export default function DocsPage() {
         <h1 className="text-4xl font-bold mb-4">
           Dokumentasi API
         </h1>
-        <p className="text-xl text-muted-foreground mb-6">Complete documentation for the Javanese Calendar API</p>
+        <p className="text-xl text-muted-foreground mb-6">
+          Dokumentasi lengkap untuk API Kalender Jawa
+        </p>
         <div className="flex gap-4">
           <Button asChild>
             <Link href="/api/v1/today">Coba API</Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/health">Cek kesehatan API</Link>
+            <Link href="/health">Cek Kesehatan API</Link>
           </Button>
         </div>
       </div>
@@ -67,7 +69,7 @@ export default function DocsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Globe className="h-5 w-5" />
-              Base URL
+              URL Dasar
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -83,13 +85,13 @@ export default function DocsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Code className="h-5 w-5" />
-              Version
+              Versi
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
               <Badge>v1.0.0</Badge>
-              <span className="text-sm text-muted-foreground">Latest</span>
+              <span className="text-sm text-muted-foreground">Terbaru</span>
             </div>
           </CardContent>
         </Card>
@@ -109,32 +111,32 @@ export default function DocsPage() {
 
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>API Overview</CardTitle>
-          <CardDescription>Understanding the Javanese Calendar API structure and capabilities</CardDescription>
+          <CardTitle>Ringkasan API</CardTitle>
+          <CardDescription>Memahami struktur dan kemampuan API Kalender Jawa</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="mb-6">
             <Image
-              src="/images/api-docs.png"
-              alt="API Documentation Overview"
+              src="/vercel.svg"
+              alt="Gambaran Dokumentasi API"
               width={800}
               height={400}
-              className="rounded-lg border"
+              className="p-5 rounded-lg border"
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-medium mb-2">What is Javanese Calendar?</h4>
-              <p className="text-sm text-muted-foreground">
-                The Javanese calendar is a traditional calendar system used in Java, Indonesia. It combines elements
-                from Hindu-Buddhist, Islamic, and indigenous Javanese traditions.
+              <h4 className="font-medium mb-2">Apa itu Kalender Jawa?</h4>
+              <p className="text-muted-foreground">
+                Kalender Jawa adalah sistem penanggalan tradisional yang digunakan di Pulau Jawa, Indonesia. Kalender ini
+                menggabungkan unsur Hindu-Buddha, Islam, dan tradisi asli Jawa.
               </p>
             </div>
             <div>
               <h4 className="font-medium mb-2">Weton & Neptu</h4>
               <p className="text-sm text-muted-foreground">
-                Weton is a combination of day names and market day names. Neptu is the numerical value associated with
-                each weton, used for compatibility calculations.
+                Weton adalah gabungan nama hari dan nama pasaran. Neptu adalah nilai angka yang terkait dengan setiap weton,
+                digunakan untuk perhitungan kecocokan.
               </p>
             </div>
           </div>
@@ -142,30 +144,32 @@ export default function DocsPage() {
       </Card>
 
       <div className="space-y-6">
-        {endpoints.map((category, categoryIndex) => (
-          <Card key={categoryIndex}>
+        {endpoints.map((category, i) => (
+          <Card key={i}>
             <CardHeader>
               <CardTitle>{category.category}</CardTitle>
               <CardDescription>
-                {category.category === "Basic Operations" && "Core date conversion and calendar operations"}
-                {category.category === "Weton & Neptu" && "Weton calculations and compatibility checks"}
-                {category.category === "Filtering" && "Advanced filtering capabilities"}
-                {category.category === "Statistics & Utility" && "Statistical analysis and utility endpoints"}
+                {category.category === "Operasi Dasar" && "Operasi inti konversi tanggal dan kalender"}
+                {category.category === "Weton & Neptu" && "Perhitungan weton dan pengecekan kecocokan"}
+                {category.category === "Penyaringan" && "Kemampuan penyaringan tingkat lanjut"}
+                {category.category === "Statistik & Utilitas" && "Analisis statistik dan utilitas API"}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {category.endpoints.map((endpoint, endpointIndex) => (
-                  <div key={endpointIndex} className="flex items-center justify-between p-4 border rounded-lg">
+                {category.endpoints.map((endpoint, j) => (
+                  <div key={j} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-1">
-                        <Badge variant={endpoint.method === "GET" ? "default" : "secondary"}>{endpoint.method}</Badge>
+                        <Badge variant={endpoint.method === "GET" ? "default" : "secondary"}>
+                          {endpoint.method}
+                        </Badge>
                         <code className="text-sm font-mono">{endpoint.path}</code>
                       </div>
                       <p className="text-sm text-muted-foreground">{endpoint.description}</p>
                     </div>
                     <Button variant="ghost" size="sm" asChild>
-                      <Link href={endpoint.path.replace(/{[^}]+}/g, "new")}>
+                      <Link href={endpoint.path.replace(/{[^}]+}/g, "contoh")}>
                         <ExternalLink className="h-4 w-4" />
                       </Link>
                     </Button>
@@ -179,28 +183,28 @@ export default function DocsPage() {
 
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>Examples</CardTitle>
-          <CardDescription>Common usage examples and sample responses</CardDescription>
+          <CardTitle>Contoh Penggunaan</CardTitle>
+          <CardDescription>Contoh penggunaan umum dan respon yang dihasilkan</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
             <div>
-              <h4 className="font-medium mb-2">Get Today's Date</h4>
+              <h4 className="font-medium mb-2">Dapatkan Tanggal Hari Ini</h4>
               <div className="bg-muted p-4 rounded-lg">
-                <code className="text-sm font-mono">curl -X GET "https://your-api-domain.com/api/v1/today"</code>
+                <code className="text-sm font-mono">curl -X GET "https://domain-api-anda.com/api/v1/today"</code>
               </div>
             </div>
             <div>
-              <h4 className="font-medium mb-2">Convert Specific Date</h4>
+              <h4 className="font-medium mb-2">Konversi Tanggal Tertentu</h4>
               <div className="bg-muted p-4 rounded-lg">
-                <code className="text-sm font-mono">curl -X GET "https://your-api-domain.com/api/v1/date/2025-01-15"</code>
+                <code className="text-sm font-mono">curl -X GET "https://domain-api-anda.com/api/v1/date/2025-01-15"</code>
               </div>
             </div>
             <div>
-              <h4 className="font-medium mb-2">Check Compatibility</h4>
+              <h4 className="font-medium mb-2">Cek Kecocokan</h4>
               <div className="bg-muted p-4 rounded-lg">
                 <code className="text-sm font-mono">
-                  curl -X GET "https://your-api-domain.com/api/v1/compatibility/1990-05-15/1992-08-20"
+                  curl -X GET "https://domain-api-anda.com/api/v1/compatibility/1990-05-15/1992-08-20"
                 </code>
               </div>
             </div>
