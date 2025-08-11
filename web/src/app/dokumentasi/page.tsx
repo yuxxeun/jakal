@@ -191,20 +191,20 @@ export default function DocsPage() {
             <div>
               <h4 className="font-medium mb-2">Dapatkan Tanggal Hari Ini</h4>
               <div className="bg-muted p-4 rounded-lg">
-                <code className="text-sm font-mono">curl -X GET "https://domain-api-anda.com/api/v1/today"</code>
+                <code className="text-sm font-mono">curl -X GET &apos;https://domain-api-anda.com/api/v1/today&apos;</code>
               </div>
             </div>
             <div>
               <h4 className="font-medium mb-2">Konversi Tanggal Tertentu</h4>
               <div className="bg-muted p-4 rounded-lg">
-                <code className="text-sm font-mono">curl -X GET "https://domain-api-anda.com/api/v1/date/2025-01-15"</code>
+                <code className="text-sm font-mono">curl -X GET &apos;https://domain-api-anda.com/api/v1/date/2025-01-15&apos;</code>
               </div>
             </div>
             <div>
               <h4 className="font-medium mb-2">Cek Kecocokan</h4>
               <div className="bg-muted p-4 rounded-lg">
                 <code className="text-sm font-mono">
-                  curl -X GET "https://domain-api-anda.com/api/v1/compatibility/1990-05-15/1992-08-20"
+                  curl -X GET &apos;https://domain-api-anda.com/api/v1/compatibility/1990-05-15/1992-08-20&apos;
                 </code>
               </div>
             </div>

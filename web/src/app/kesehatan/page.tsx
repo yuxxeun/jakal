@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { RefreshCw, Activity, Server, Database } from "lucide-react"
 
 export default function HealthPage() {
-  const [healthData, setHealthData] = useState(null)
+  const [, setHealthData] = useState(null)
   const [loading, setLoading] = useState(false)
 
   const fetchHealthData = async () => {

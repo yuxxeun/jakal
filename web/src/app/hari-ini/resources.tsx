@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { RefreshCw, Calendar, Clock, Sun } from "lucide-react"
 
 export default function Resources() {
-  const [todayData, setTodayData] = useState(null)
+  const [, setTodayData] = useState(null)
   const [loading, setLoading] = useState(false)
 
   const fetchTodayData = async () => {

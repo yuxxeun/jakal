@@ -1,7 +1,6 @@
 "use client"
 
-import { Site } from "@/lib/site"
-import { IconBrandVercel, IconPackageFill } from "@intentui/icons"
+import { IconBrandVercel } from "@intentui/icons"
 import Link from "next/link"
 
 const navigation = {
