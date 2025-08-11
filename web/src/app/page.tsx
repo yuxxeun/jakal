@@ -2,21 +2,26 @@ import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Calendar, Clock, Filter } from "lucide-react"
+import { Site } from "@/lib/site"
 
 export default function HomePage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Jakal - Javanese Calendar API</h1>
+        <h1 className="text-3xl font-bold mb-4">
+          {Site.title} - {Site.tagline}
+        </h1>
         <p className="text-xl text-muted-foreground mb-8">
           API untuk konversi tanggal Jawa dengan perhitungan weton dan neptu yang akurat
         </p>
         <div className="flex justify-center gap-4">
           <Button asChild>
-            <Link href="/api/v1/today">Get Today's Date</Link>
+            <Link href="/hari-ini">
+              Cek weton hari ini
+            </Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/docs">View Documentation</Link>
+            <Link href="/dokumentasi">Baca dokumentasi</Link>
           </Button>
         </div>
       </div>
@@ -32,13 +37,13 @@ export default function HomePage() {
           </CardHeader>
           <CardContent className="space-y-2">
             <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/api/v1/today">Today's Date</Link>
+              <Link href="/api/v1/today">Hari ini</Link>
             </Button>
             <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/convert">Date Conversion</Link>
+              <Link href="/konversi">Konversi tanggal</Link>
             </Button>
             <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/range">Date Range</Link>
+              <Link href="/range">Rentang tanggal</Link>
             </Button>
           </CardContent>
         </Card>
@@ -49,17 +54,17 @@ export default function HomePage() {
               <Clock className="h-5 w-5" />
               Weton & Neptu
             </CardTitle>
-            <CardDescription>Weton calculations and compatibility checks</CardDescription>
+            <CardDescription>Perhitungan weton dan kecocokan.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
             <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/weton">Check Weton</Link>
+              <Link href="/weton">Cek Weton</Link>
             </Button>
             <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/neptu">Calculate Neptu</Link>
+              <Link href="/neptu">Hitung Neptu</Link>
             </Button>
             <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/compatibility">Compatibility</Link>
+              <Link href="/kecocokan">Kecocokan</Link>
             </Button>
           </CardContent>
         </Card>
