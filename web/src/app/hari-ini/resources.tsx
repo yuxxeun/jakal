@@ -1,25 +1,51 @@
 "use client"
 
-import Link from "next/link"
-
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { RefreshCw, Calendar, Clock, Sun } from "lucide-react"
+import { Calendar, Clock, AlertCircle } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+
+interface TodayData {
+  gregorian_date: string
+  day: string
+  pasaran: string
+  weton: string
+  javanese_year: number
+  day_of_week: number
+  pasaran_index: number
+  neptu: number
+}
+
+interface ApiResponse {
+  status: string
+  message: string
+  data: TodayData
+}
 
 export default function Resources() {
-  const [, setTodayData] = useState(null)
+  const [todayData, setTodayData] = useState<TodayData | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const fetchTodayData = async () => {
     setLoading(true)
+    setError(null)
     try {
-      const response = await fetch("/api/v1/today")
-      const data = await response.json()
-      setTodayData(data)
+      const response = await fetch("http://localhost:8080/api/v1/today")
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const json: ApiResponse = await response.json()
+
+      if (json.data) {
+        setTodayData(json.data)
+      } else {
+        throw new Error("Data tidak ditemukan dalam response")
+      }
     } catch (error) {
       console.error("Error fetching today data:", error)
+      setError(error instanceof Error ? error.message : "Gagal mengambil data")
     } finally {
       setLoading(false)
     }
@@ -44,30 +70,62 @@ export default function Resources() {
         <p className="text-muted-foreground">Informasi lengkap tanggal Jawa hari ini</p>
       </div>
 
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
+          <p className="text-red-800 dark:text-red-200">
+            <strong>Error:</strong> {error}
+          </p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="lg:col-span-2">
+        {/* Tanggal Masehi */}
+        <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Sun className="h-6 w-6 text-yellow-500" />
-              Tanggal Hari Ini
+              <Calendar className="h-5 w-5" />
+              Tanggal Masehi
             </CardTitle>
-            <CardDescription>Informasi lengkap tanggal Masehi dan Jawa</CardDescription>
+            <CardDescription>Tanggal berdasarkan kalender Gregorian</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 rounded-lg">
-                  <Calendar className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                  <h3 className="font-semibold text-lg mb-2">Tanggal Masehi</h3>
-                  <p className="text-2xl font-bold">{formattedDate}</p>
-                </div>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Tanggal:</span>
+                <span className="text-muted-foreground">{formattedDate}</span>
               </div>
-              <div className="space-y-4">
-                <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 rounded-lg">
-                  <Clock className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                  <h3 className="font-semibold text-lg mb-2">Tanggal Jawa</h3>
-                  <p className="text-xl font-bold">{loading ? "Memuat..." : "Akan ditampilkan tanggal Jawa"}</p>
-                </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Tanggal Jawa */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5" />
+              Tanggal Jawa
+            </CardTitle>
+            <CardDescription>Tanggal berdasarkan kalender Jawa</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Hari Jawa:</span>
+                <span className="text-muted-foreground">
+                  {loading ? "..." : todayData?.day ?? "-"}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Pasaran:</span>
+                <span className="text-muted-foreground">
+                  {loading ? "..." : todayData?.pasaran ?? "-"}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Tahun Jawa:</span>
+                <span className="text-muted-foreground">
+                  {loading ? "..." : todayData?.javanese_year ?? "-"}
+                </span>
               </div>
             </div>
           </CardContent>
@@ -82,21 +140,13 @@ export default function Resources() {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="font-medium">Weton:</span>
-                <Badge variant="secondary" className="text-lg px-3 py-1">
-                  {loading ? "Menghitung..." : "Akan ditampilkan weton"}
+                <Badge variant="default" className="text-md px-3 py-1">
+                  {loading ? "Menghitung..." : todayData?.weton ?? "-"}
                 </Badge>
               </div>
               <div className="flex justify-between items-center">
-                <span className="font-medium">Hari Pasaran:</span>
-                <span className="text-muted-foreground">{loading ? "..." : "Akan ditampilkan pasaran"}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="font-medium">Hari Jawa:</span>
-                <span className="text-muted-foreground">{loading ? "..." : "Akan ditampilkan hari Jawa"}</span>
-              </div>
-              <div className="flex justify-between items-center">
                 <span className="font-medium">Neptu:</span>
-                <Badge variant="outline">{loading ? "..." : "Akan ditampilkan neptu"}</Badge>
+                <Badge>{loading ? "..." : todayData?.neptu ?? "-"}</Badge>
               </div>
             </div>
           </CardContent>
@@ -110,44 +160,17 @@ export default function Resources() {
           <CardContent>
             <div className="space-y-3">
               <div>
-                <h4 className="font-medium mb-2">Sifat Umum:</h4>
-                <p className="text-sm text-muted-foreground">
-                  {loading
-                    ? "Memuat karakteristik..."
-                    : "Karakteristik weton akan ditampilkan di sini berdasarkan perhitungan."}
-                </p>
-              </div>
-              <div>
-                <h4 className="font-medium mb-2">Rekomendasi:</h4>
-                <p className="text-sm text-muted-foreground">
-                  {loading ? "Memuat rekomendasi..." : "Rekomendasi aktivitas berdasarkan weton hari ini."}
-                </p>
+                <Alert variant="destructive">
+                  <AlertCircle />
+                  <AlertDescription>
+                    Bagian ini sedang dalam tahap pengembangan.
+                  </AlertDescription>
+                </Alert>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
-
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Aksi</CardTitle>
-          <CardDescription>Perbaharui data atau jelajahi fitur lainnya</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-4">
-            <Button onClick={fetchTodayData} disabled={loading}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
-              Perbaharui Data
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/konversi-tanggal">Konversi Tanggal Lain</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/cek-weton">Cek Weton</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }

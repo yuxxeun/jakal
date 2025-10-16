@@ -1,95 +1,50 @@
-import Link from "next/link"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, Filter } from "lucide-react"
-import { Site } from "@/lib/site"
+import { Badge } from "@/components/ui/badge"
+import { Sparkles, ArrowRight } from "lucide-react"
+import Link from "next/link"
 
-export default function HomePage() {
+export default function HeroSection() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-12">
-        <h1 className="text-3xl font-bold mb-4">
-          {Site.title} - {Site.tagline}
-        </h1>
-        <p className="text-xl text-muted-foreground mb-8">
-          API untuk konversi tanggal Jawa dengan perhitungan weton dan neptu yang akurat
-        </p>
-        <div className="flex justify-center gap-4">
-          <Button asChild>
-            <Link href="/hari-ini">
-              Cek weton hari ini
-            </Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/dokumentasi">Baca dokumentasi</Link>
-          </Button>
+    <div className="relative overflow-hidden">
+      <main className="container relative mx-auto px-4 py-16 md:py-24">
+        {/* Eyebrow */}
+        <div className="flex justify-center mb-6">
+          <Badge variant="outline" className="px-3 py-1.5 text-xs font-medium border-border bg-background/60">
+            <Sparkles className="w-3.5 h-3.5 mr-1.5 text-primary" aria-hidden="true" />
+            Kalender Jawa
+          </Badge>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              Basic Operations
-            </CardTitle>
-            <CardDescription>Core date conversion and calendar operations</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/api/v1/today">Hari ini</Link>
-            </Button>
-            <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/konversi">Konversi tanggal</Link>
-            </Button>
-            <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/range">Rentang tanggal</Link>
-            </Button>
-          </CardContent>
-        </Card>
+        {/* Hero */}
+        <section className="max-w-3xl mx-auto text-center space-y-4">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-balance">
+            Hitung Weton & Hari Baik Secara Instan
+          </h1>
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+            Konversi Masehi ke Jawa, cek neptu, dan temukan hari baik—tanpa ribet.
+          </p>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
-              Weton & Neptu
-            </CardTitle>
-            <CardDescription>Perhitungan weton dan kecocokan.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/weton">Cek Weton</Link>
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <Button size="lg" className="sm:w-auto px-6">
+              <Link href="/weton" className="inline-flex items-center">
+                Cek Weton
+                <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+              </Link>
             </Button>
-            <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/neptu">Hitung Neptu</Link>
+            <Button size="lg" variant="ghost" className="sm:w-auto px-6">
+              <Link href="/hari-ini" className="inline-flex items-center">
+                Lihat Hari Ini
+              </Link>
             </Button>
-            <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/kecocokan">Kecocokan</Link>
-            </Button>
-          </CardContent>
-        </Card>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Filter className="h-5 w-5" />
-              Filtering & Stats
-            </CardTitle>
-            <CardDescription>Advanced filtering and statistical data</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/filter">Filter Dates</Link>
-            </Button>
-            <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/statistics">View Statistics</Link>
-            </Button>
-            <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link href="/good-days">Good Days</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+          {/* Tiny reassurance row */}
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
+            <span className="text-xs md:text-sm text-muted-foreground">Akurat • Cepat • Tanpa Iklan</span>
+          </div>
+        </section>
+      </main>
     </div>
   )
 }

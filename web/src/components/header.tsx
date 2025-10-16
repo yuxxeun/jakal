@@ -1,22 +1,16 @@
-'use client'
+"use client"
 
 import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
 import { Menu } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Site } from "@/lib/site"
 import { Separator } from "./ui/separator"
-import {
-    IconBrandGithub,
-    IconBrandInstagram,
-    IconBrandRssFeed,
-    IconBrandVercel
-} from "@intentui/icons"
+import { IconBrandGithub, IconBrandVercel } from "@intentui/icons"
 
 export default function Header() {
     const links = [
         { href: "/", label: "Beranda" },
+        { href: "/hari-ini", label: "Hari ini" },
         { href: "/weton", label: "Weton" },
         { href: "/neptu", label: "Neptu" },
         { href: "/perhitungan", label: "Perhitungan" },
@@ -25,63 +19,40 @@ export default function Header() {
     ]
 
     return (
-        <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <nav className="container h-16 px-6 flex items-center">
-
+        <header className="sticky top-0 z-50 border-b bg-background/95 supports-[backdrop-filter]:bg-background/80">
+            <nav className="container h-14 px-4 flex items-center">
                 {/* DESKTOP (>= md) */}
-                <div className="hidden md:grid md:grid-cols-3 md:w-full md:items-center">
-                    {/* Kolom kiri - Logo */}
+                <div className="hidden md:grid md:grid-cols-[auto_1fr_auto] md:w-full md:items-center md:gap-6">
                     <div className="flex items-center">
                         <Link
                             href="/"
-                            className="flex items-center gap-2 text-lg font-semibold tracking-tight"
+                            className="flex items-center gap-2 text-lg font-semibold tracking-tight hover:opacity-90 transition-opacity"
                         >
-                            <IconBrandVercel className="h-5 w-5 text-primary" />
+                            <IconBrandVercel className="h-5 w-5" />
                             <span className="leading-none">{Site.title}</span>
                         </Link>
                     </div>
 
-                    {/* Kolom tengah - Menu */}
-                    <div className="flex items-center gap-2 justify-center">
+                    <div className="flex items-center gap-1 justify-center">
                         {links.map((link) => (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={cn(
-                                    buttonVariants({ variant: "ghost" }),
-                                    "px-3 text-sm font-medium transition-colors hover:text-primary"
-                                )}
+                                className="px-3 py-1.5 text-sm rounded-md transition-colors hover:bg-accent"
                             >
                                 {link.label}
                             </Link>
                         ))}
                     </div>
 
-                    {/* Kolom kanan - Ikon sosial */}
-                    <div className="flex justify-end items-center gap-4">
+                    <div className="flex justify-end items-center gap-2">
                         <Link
-                            href="https://github.com"
+                            href={Site.social.github}
                             target="_blank"
                             aria-label="GitHub"
-                            className="hover:text-primary transition-colors"
+                            className="p-2 rounded-md hover:bg-accent transition-colors"
                         >
                             <IconBrandGithub className="h-5 w-5" />
-                        </Link>
-                        <Link
-                            href="https://instagram.com"
-                            target="_blank"
-                            aria-label="Instagram"
-                            className="hover:text-primary transition-colors"
-                        >
-                            <IconBrandInstagram className="h-5 w-5" />
-                        </Link>
-                        <Link
-                            href="/rss"
-                            target="_blank"
-                            aria-label="RSS Feed"
-                            className="hover:text-primary transition-colors"
-                        >
-                            <IconBrandRssFeed className="h-5 w-5" />
                         </Link>
                     </div>
                 </div>
@@ -91,70 +62,57 @@ export default function Header() {
                     {/* Logo */}
                     <Link
                         href="/"
-                        className="flex items-center gap-2 text-lg font-semibold tracking-tight"
+                        className="flex items-center gap-2 text-lg font-semibold tracking-tight hover:opacity-90 transition-opacity"
                     >
-                        <IconBrandVercel className="h-5 w-5 text-primary" />
+                        <IconBrandVercel className="h-5 w-5" />
                         <span className="leading-none">{Site.title}</span>
                     </Link>
 
                     {/* Burger Menu */}
                     <Sheet>
                         <SheetTrigger asChild>
-                            <button
-                                className="p-2 rounded-md hover:bg-accent"
-                                aria-label="Buka menu navigasi"
-                            >
+                            <button className="p-2.5 rounded-lg hover:bg-accent transition-colors" aria-label="Buka menu navigasi">
                                 <Menu className="h-5 w-5" />
                             </button>
                         </SheetTrigger>
-                        <SheetContent side="left" className="p-6">
-                            <div className="mb-6 flex items-center gap-2">
-                                <IconBrandVercel className="h-5 w-5 text-primary" />
-                                <span className="text-lg font-semibold">{Site.title}</span>
+                        <SheetContent side="left" className="p-0 w-72">
+                            {/* Mobile Header */}
+                            <div className="px-4 py-4 border-b bg-muted/30">
+                                <div className="flex items-center gap-2">
+                                    <IconBrandVercel className="h-5 w-5" />
+                                    <span className="text-lg font-semibold">{Site.title}</span>
+                                </div>
                             </div>
 
-                            <div className="flex flex-col gap-2">
-                                {links.map((link) => (
+                            {/* Navigation Links */}
+                            <div className="px-3 py-4">
+                                <div className="flex flex-col gap-1">
+                                    {links.map((link) => (
+                                        <Link
+                                            key={link.href}
+                                            href={link.href}
+                                            className="w-full justify-start text-sm px-3 py-2 rounded-md hover:bg-accent transition-colors"
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <Separator />
+
+                            {/* Social Links */}
+                            <div className="px-4 py-3">
+                                <div className="flex items-center gap-2">
                                     <Link
-                                        key={link.href}
-                                        href={link.href}
-                                        className={cn(
-                                            buttonVariants({ variant: "ghost" }),
-                                            "w-full justify-start text-base"
-                                        )}
+                                        href={Site.social.github}
+                                        target="_blank"
+                                        aria-label="GitHub"
+                                        className="p-2 rounded-md hover:bg-accent transition-colors"
                                     >
-                                        {link.label}
+                                        <IconBrandGithub className="h-5 w-5" />
                                     </Link>
-                                ))}
-                            </div>
-
-                            <Separator className="my-4" />
-
-                            <div className="flex items-center gap-4">
-                                <Link
-                                    href="https://github.com"
-                                    target="_blank"
-                                    aria-label="GitHub"
-                                    className="hover:text-primary transition-colors"
-                                >
-                                    <IconBrandGithub className="h-5 w-5" />
-                                </Link>
-                                <Link
-                                    href="https://instagram.com"
-                                    target="_blank"
-                                    aria-label="Instagram"
-                                    className="hover:text-primary transition-colors"
-                                >
-                                    <IconBrandInstagram className="h-5 w-5" />
-                                </Link>
-                                <Link
-                                    href="/rss"
-                                    target="_blank"
-                                    aria-label="RSS Feed"
-                                    className="hover:text-primary transition-colors"
-                                >
-                                    <IconBrandRssFeed className="h-5 w-5" />
-                                </Link>
+                                </div>
                             </div>
                         </SheetContent>
                     </Sheet>

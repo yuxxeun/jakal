@@ -27,80 +27,23 @@ export function Footer() {
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="relative z-20 mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8 lg:pt-16 lg:pb-32">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <div>
-            <IconBrandVercel className="size-7" />
+      <div className="relative z-20 mx-auto max-w-7xl px-4 py-8 lg:px-8">
+        <div className="flex flex-col gap-4 items-center justify-between md:flex-row">
+          <div className="flex items-center gap-2 text-sm">
+            <IconBrandVercel className="size-5" />
+            <span className="text-muted-fg">Kalender Jawa</span>
           </div>
-          <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="font-semibold text-fg text-sm leading-6">Resources</h3>
-                <ul className="mt-4 space-y-2">
-                  {navigation.resources.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-muted-fg text-sm leading-6 data-hovered:text-fg"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="mt-10 md:mt-0">
-                <h3 className="font-semibold text-fg text-sm leading-6">Support</h3>
-                <ul className="mt-4 space-y-2">
-                  {navigation.supports.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        target="_blank"
-                        href={item.href}
-                        className="text-muted-fg text-sm leading-6 data-hovered:text-fg"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="font-semibold text-fg text-sm leading-6">Extra</h3>
-                <ul className="mt-4 space-y-2">
-                  {navigation.labs.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        target="_blank"
-                        href={item.href}
-                        className="text-muted-fg text-sm leading-6 data-hovered:text-fg"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="mt-10 md:mt-0">
-                <h3 className="font-semibold text-fg text-sm leading-6">Legal</h3>
-                <ul className="mt-4 space-y-2">
-                  {navigation.legal.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        target="_blank"
-                        href={item.href}
-                        className="text-muted-fg text-sm leading-6 data-hovered:text-fg"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
+          <nav aria-label="Footer" className="flex items-center gap-4 text-sm text-muted-fg">
+            <Link href="https://github.com/yuxxeun/w3show" target="_blank" className="hover:text-fg">
+              Github
+            </Link>
+            <Link href="https://intentui.com" target="_blank" className="hover:text-fg">
+              Intent UI
+            </Link>
+            <Link href="https://github.com/yuxxeun/w3show/blob/main/LICENSE" target="_blank" className="hover:text-fg">
+              MIT License
+            </Link>
+          </nav>
         </div>
       </div>
     </footer>
