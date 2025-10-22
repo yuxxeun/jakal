@@ -21,7 +21,6 @@ export default function Header() {
     return (
         <header className="sticky top-0 z-50 border-b bg-background/95 supports-[backdrop-filter]:bg-background/80">
             <nav className="container h-14 px-4 flex items-center">
-                {/* DESKTOP (>= md) */}
                 <div className="hidden md:grid md:grid-cols-[auto_1fr_auto] md:w-full md:items-center md:gap-6">
                     <div className="flex items-center">
                         <Link
@@ -57,9 +56,7 @@ export default function Header() {
                     </div>
                 </div>
 
-                {/* MOBILE (< md) */}
                 <div className="flex justify-between items-center w-full md:hidden">
-                    {/* Logo */}
                     <Link
                         href="/"
                         className="flex items-center gap-2 text-lg font-semibold tracking-tight hover:opacity-90 transition-opacity"
@@ -76,7 +73,6 @@ export default function Header() {
                             </button>
                         </SheetTrigger>
                         <SheetContent side="left" className="p-0 w-72">
-                            {/* Mobile Header */}
                             <div className="px-4 py-4 border-b bg-muted/30">
                                 <div className="flex items-center gap-2">
                                     <IconBrandVercel className="h-5 w-5" />
@@ -84,7 +80,6 @@ export default function Header() {
                                 </div>
                             </div>
 
-                            {/* Navigation Links */}
                             <div className="px-3 py-4">
                                 <div className="flex flex-col gap-1">
                                     {links.map((link) => (
@@ -101,7 +96,6 @@ export default function Header() {
 
                             <Separator />
 
-                            {/* Social Links */}
                             <div className="px-4 py-3">
                                 <div className="flex items-center gap-2">
                                     <Link

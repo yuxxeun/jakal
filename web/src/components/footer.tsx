@@ -3,24 +3,6 @@
 import { IconBrandVercel } from "@intentui/icons"
 import Link from "next/link"
 
-const navigation = {
-  supports: [
-    { name: "Github Star", href: "https://github.com/yuxxeun/w3show" },
-    { name: "Nih Buat Jajan", href: "https://www.nihbuatjajan.com/yuxxeun" },
-  ],
-  resources: [
-    { name: "Adobe React Aria", href: "https://react-spectrum.adobe.com/index.html" },
-    { name: "Intent UI", href: "https://intentui.com" },
-    { name: "Icons", href: "https://intentui.com/icons" },
-  ],
-  labs: [
-    { name: "Dokumentasi", href: "/dokumentasi" },
-    { name: "Kesehatan API", href: "/kesehatan" },
-    { name: "Github", href: "https://github.com/yuxxeun/w3show" },
-  ],
-  legal: [{ name: "MIT License", href: "https://github.com/yuxxeun/w3show/blob/main/LICENSE" }],
-}
-
 export function Footer() {
   return (
     <footer aria-labelledby="footer-heading" className="border-t text-bg-fg">
