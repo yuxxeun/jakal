@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.go",
+      "use": "@vercel/go"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.go"
+    }
+  ],
+  "env": {
+    "GO111MODULE": "on",
+    "GOPROXY": "https://proxy.golang.org,direct"
+  },
+  "functions": {
+    "api/index.go": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
+}
