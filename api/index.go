@@ -1,30 +1,23 @@
 package main
 
 import (
+	"log"
 	"net/http"
-	"strings"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/yuxxeun/jakal/internal/routes"
 )
 
-// Handler adalah entry point untuk Vercel serverless function
-func Handler(w http.ResponseWriter, r *http.Request) {
-	// Setup router
+func main() {
 	router := mux.NewRouter()
 
 	// Setup routes
 	routes.SetupJavaneseCalendarRoutes(router)
 
-	// CORS headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-
-	if r.Method == "OPTIONS" {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
+	// Add middleware
+	router.Use(loggingMiddleware)
+	router.Use(corsMiddleware)
 
 	// Health check endpoint
 	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
@@ -87,30 +80,42 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		}`))
 	}).Methods("GET")
 
-	// Vercel mengirim path lengkap, kita perlu handle dengan benar
-	// Jika path dimulai dengan /api, kita serve dengan router
-	// Jika tidak, kita arahkan ke root handler
-	path := r.URL.Path
-	
-	// Untuk root path, tampilkan dokumentasi
-	if path == "/" || path == "" {
-		router.ServeHTTP(w, r)
-		return
+	// Get port from environment or use default
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
 	}
 
-	// Untuk semua request lainnya, gunakan router
-	router.ServeHTTP(w, r)
+	log.Printf("🚀 Javanese Calendar API Server starting on port %s", port)
+	log.Printf("📖 API Documentation: http://localhost:%s/", port)
+	log.Printf("💚 Health Check: http://localhost:%s/health", port)
+	log.Printf("📅 Example: http://localhost:%s/api/v1/today", port)
+	log.Printf("🔍 Filter Weton: http://localhost:%s/api/v1/weton/selasa-legi/2025", port)
+
+	// Start server
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
-// Fungsi untuk normalize path (opsional, jika diperlukan)
-func normalizePath(path string) string {
-	// Hapus trailing slash
-	path = strings.TrimSuffix(path, "/")
-	
-	// Pastikan path dimulai dengan /
-	if !strings.HasPrefix(path, "/") {
-		path = "/" + path
-	}
-	
-	return path
+// Middleware untuk logging
+func loggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s %s %s", r.Method, r.RequestURI, r.RemoteAddr)
+		next.ServeHTTP(w, r)
+	})
+}
+
+// Middleware untuk CORS
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
